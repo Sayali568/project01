@@ -17,5 +17,22 @@
     "fintech"
   ],
   "author": "ChronosMatch Engineering",
-  "license": "MIT"
+  "license": "MIT",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sayali568/project01.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Sayali568/project01/issues"
+  },
+  "homepage": "https://github.com/Sayali568/project01#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
 }
