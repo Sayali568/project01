@@ -1,0 +1,17 @@
+<<<<<<< HEAD
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+=======
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[codz]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+>>>>>>> 04796b726c68001f1a827f8f193a49c8787edc96
