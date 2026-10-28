@@ -136,6 +136,36 @@
             border-color: var(--blue);
         }
 
+         /* Metrics Bar */
+        .metrics-bar {
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .metric-card {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-val {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+
 
 
 
