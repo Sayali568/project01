@@ -165,6 +165,43 @@
             color: var(--text-primary);
         }
 
+         .metric-highlight {
+            color: var(--green);
+        }
+
+        /* Main Workspace */
+        main {
+            flex: 1;
+            padding: 20px 24px;
+            display: grid;
+            grid-template-columns: 340px 1fr 340px;
+            gap: 20px;
+        }
+
+        @media (max-width: 1200px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-elevated);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
 
 
 
