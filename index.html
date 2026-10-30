@@ -201,7 +201,56 @@
             align-items: center;
             justify-content: space-between;
         }
+ .panel-title {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
 
+        /* Symbols Switcher */
+        .symbol-tabs {
+            display: flex;
+            gap: 6px;
+        }
+
+        .symbol-tab {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .symbol-tab.active, .symbol-tab:hover {
+            background: var(--blue-glow);
+            border-color: var(--pink);
+            color: #fff;
+        }
+
+        /* Order Book Table */
+        .book-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .book-table-hdr {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            padding: 6px 4px;
+            color: var(--text-muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
 
 
 
