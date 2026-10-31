@@ -252,6 +252,86 @@
             border-bottom: 1px solid var(--border);
         }
 
+        .book-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            padding: 5px 4px;
+            position: relative;
+            font-size: 12px;
+        }
+
+        .book-row .bar {
+            position: absolute;
+            top: 1px;
+            bottom: 1px;
+            right: 0;
+            z-index: 0;
+            opacity: 0.2;
+            border-radius: 2px;
+        }
+
+        .book-row.ask .bar {
+            background: var(--red);
+        }
+
+        .book-row.bid .bar {
+            background: var(--green);
+        }
+
+        .book-row span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .ask-price {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .bid-price {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .spread-banner {
+            margin: 10px 0;
+            padding: 8px 12px;
+            background: var(--bg-elevated);
+            border: 1px dashed var(--border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        /* Order Form */
+        .order-form {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .side-toggle {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .side-btn {
+            padding: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.13s ease;
+        }
+
+
 
 
 
