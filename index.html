@@ -330,7 +330,60 @@
             cursor: pointer;
             transition: all 0.13s ease;
         }
+         .side-btn.buy.active {
+            background: var(--green);
+            border-color: var(--green);
+            color: #fff;
+            box-shadow: 0 0 14px var(--green-glow);
+        }
 
+        .side-btn.sell.active {
+            background: var(--red);
+            border-color: var(--red);
+            color: #fff;
+            box-shadow: 0 0 14px var(--red-glow);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .form-input, .form-select {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.13s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: var(--blue);
+        }
+
+        .submit-btn {
+            margin-top: 8px;
+            background: linear-gradient(135deg, #54a58a, #059669);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
 
 
 
