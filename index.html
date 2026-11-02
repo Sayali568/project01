@@ -385,6 +385,47 @@
             transition: all 0.15s ease;
         }
 
+         .submit-btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .burst-btn {
+            background: var(--bg-elevated);
+            border: 1px solid var(--blue);
+            color: var(--blue);
+            padding: 10px;
+            font-weight: 600;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .burst-btn:hover {
+            background: var(--blue-glow);
+            color: #fff;
+        }
+
+        /* Trades Tape */
+        .trades-list {
+            flex: 1;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-height: 480px;
+            overflow-y: auto;
+        }
+
+        .trade-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            padding: 4px 6px;
+            font-size: 11px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+
 
 
 
