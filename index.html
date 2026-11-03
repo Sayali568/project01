@@ -424,7 +424,64 @@
             font-size: 11px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         }
+        .trade-item.buy .price { color: var(--green); }
+        .trade-item.sell .price { color: var(--red); }
 
+        /* Notification Toast */
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--green);
+            color: var(--text-primary);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-group">
+            <div class="logo-badge">HFT</div>
+            <div>
+                <div class="logo-title">ChronosMatch</div>
+                <div class="logo-tag">Zero-Copy Electronic Trading Matching Engine</div>
+            </div>
+        </div>
+        <div class="header-stats">
+            <div class="status-pill">
+                <div class="pulse-dot"></div>
+                ENGINE LIVE
+            </div>
+            <a href="https://github.com/Sayali568/ChronosMatch" target="_blank" class="github-link">
+                GitHub Repository ↗
+            </a>
+        </div>
+    </header>
+
+    <div class="metrics-bar mono">
+        <div class="metric-card">
+            <span class="metric-label">Median Latency (p50)</span>
+            <span class="metric-val metric-highlight">3.20 µs</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">Engine Throughput</span>
+            <span class="metric-val metric-highlight">235,303 orders/s</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">IPC Ring Buffer</span>
+            <span class="metric-val">Lockless SPSC SharedMem</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">Memory Architecture</span>
+            <span class="metric-val">Zero-Copy Buffer Protocol</span>
+        </div>
+    </div>
 
 
 
