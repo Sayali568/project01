@@ -483,6 +483,69 @@
         </div>
     </div>
 
+    <main>
+        <!-- Left: Order Book Ladder -->
+        <section class="panel">
+            <div class="panel-header">
+                <span class="panel-title">L2 Order Book</span>
+                <div class="symbol-tabs">
+                    <button class="symbol-tab active" onclick="switchSymbol('BTCUSDT', this)">BTCUSDT</button>
+                    <button class="symbol-tab" onclick="switchSymbol('ETHUSDT', this)">ETHUSDT</button>
+                    <button class="symbol-tab" onclick="switchSymbol('AAPL', this)">AAPL</button>
+                </div>
+            </div>
+            <div class="book-container mono">
+                <div class="book-table-hdr">
+                    <span>Price</span>
+                    <span style="text-align: right;">Size</span>
+                    <span style="text-align: right;">Total</span>
+                </div>
+                
+                <!-- Asks (Red) -->
+                <div id="asks-list" style="display: flex; flex-direction: column-reverse; min-height: 120px;"></div>
+
+                <!-- Spread Banner -->
+                <div class="spread-banner">
+                    <span style="color: var(--text-muted);">Spread: <strong id="spread-val" style="color: var(--text-primary);">0.50</strong></span>
+                    <span style="color: var(--text-muted);">BBO Mid: <strong id="mid-val" style="color: var(--pink);">65000.00</strong></span>
+                </div>
+
+                <!-- Bids (Green) -->
+                <div id="bids-list" style="display: flex; flex-direction: column; min-height: 120px;"></div>
+            </div>
+        </section>
+
+        <!-- Center: Interactive Order Entry -->
+        <section class="panel">
+            <div class="panel-header">
+                <span class="panel-title">Order Placement Gateway</span>
+                <span id="active-symbol-badge" class="mono" style="font-size: 11px; color: var(--blue); font-weight: 700;">BTCUSDT</span>
+            </div>
+            <div class="order-form">
+                <div class="side-toggle">
+                    <button type="button" class="side-btn buy active" id="btn-buy" onclick="setSide('BUY')">BUY</button>
+                    <button type="button" class="side-btn sell" id="btn-sell" onclick="setSide('SELL')">SELL</button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Order Type</label>
+                    <select class="form-select" id="input-type" onchange="togglePriceField()">
+                        <option value="LIMIT">LIMIT ORDER</option>
+                        <option value="MARKET">MARKET ORDER (AGGRESSIVE)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="group-price">
+                    <label class="form-label">Limit Price ($)</label>
+                    <input type="number" step="0.01" class="form-input mono" id="input-price" value="65000.00">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Order Quantity (Units)</label>
+                    <input type="number" min="1" step="1" class="form-input mono" id="input-qty" value="10">
+                </div>
+
+
 
 
 
