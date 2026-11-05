@@ -544,7 +544,205 @@
                     <label class="form-label">Order Quantity (Units)</label>
                     <input type="number" min="1" step="1" class="form-input mono" id="input-qty" value="10">
                 </div>
+<div class="form-group">
+                    <label class="form-label">Time In Force (TIF)</label>
+                    <select class="form-select" id="input-tif">
+                        <option value="GTC">Good 'Til Cancelled (GTC)</option>
+                        <option value="IOC">Immediate Or Cancel (IOC)</option>
+                        <option value="FOK">Fill Or Kill (FOK)</option>
+                    </select>
+                </div>
 
+                <button class="submit-btn" id="btn-submit" onclick="submitOrder()">Submit to Matching Engine</button>
+                <button class="burst-btn" onclick="triggerSimulationBurst()">⚡ Simulate 10 Random Order Matches</button>
+            </div>
+        </section>
+
+        <!-- Right: Execution Tape -->
+        <section class="panel">
+            <div class="panel-header">
+                <span class="panel-title">Real-time Trade Tape</span>
+                <span class="mono" style="font-size: 11px; color: var(--text-muted);" id="trade-count">0 trades</span>
+            </div>
+            <div class="book-table-hdr mono" style="padding: 6px 16px;">
+                <span>Price</span>
+                <span style="text-align: right;">Qty</span>
+                <span style="text-align: right;">Time</span>
+            </div>
+            <div class="trades-list mono" id="trades-tape">
+                <div style="color: var(--text-muted); font-size: 11px; text-align: center; padding: 24px;">No executions yet. Submit orders or trigger burst to match!</div>
+            </div>
+        </section>
+    </main>
+
+    <div id="toast"></div>
+
+    <script>
+        // High-performance client-side simulation engine for GitHub Pages
+        const bookData = {
+            'BTCUSDT': {
+                basePrice: 65000.00,
+                bids: [
+                    { price: 64999.50, quantity: 8 },
+                    { price: 64999.00, quantity: 15 },
+                    { price: 64998.50, quantity: 22 },
+                    { price: 64998.00, quantity: 10 },
+                    { price: 64997.50, quantity: 30 }
+                ],
+                asks: [
+                    { price: 65000.50, quantity: 6 },
+                    { price: 65001.00, quantity: 12 },
+                    { price: 65001.50, quantity: 18 },
+                    { price: 65002.00, quantity: 25 },
+                    { price: 65002.50, quantity: 14 }
+                ]
+            },
+            'ETHUSDT': {
+                basePrice: 3500.00,
+                bids: [
+                    { price: 3499.50, quantity: 20 },
+                    { price: 3499.00, quantity: 35 },
+                    { price: 3498.50, quantity: 50 }
+                ],
+                asks: [
+                    { price: 3500.50, quantity: 15 },
+                    { price: 3501.00, quantity: 40 },
+                    { price: 3501.50, quantity: 60 }
+                ]
+            },
+            'AAPL': {
+                basePrice: 150.00,
+                bids: [
+                    { price: 149.95, quantity: 100 },
+                    { price: 149.90, quantity: 250 },
+                    { price: 149.85, quantity: 400 }
+                ],
+                asks: [
+                    { price: 150.05, quantity: 120 },
+                    { price: 150.10, quantity: 300 },
+                    { price: 150.15, quantity: 500 }
+                ]
+            }
+        };
+
+        let currentSymbol = 'BTCUSDT';
+        let currentSide = 'BUY';
+        let orderCounter = 90000;
+        let tradesTape = [];
+
+        function setSide(side) {
+            currentSide = side;
+            document.getElementById('btn-buy').classList.toggle('active', side === 'BUY');
+            document.getElementById('btn-sell').classList.toggle('active', side === 'SELL');
+            const submitBtn = document.getElementById('btn-submit');
+            if (side === 'BUY') {
+                submitBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                submitBtn.innerText = 'Submit BUY Order';
+            } else {
+                submitBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                submitBtn.innerText = 'Submit SELL Order';
+            }
+        }
+
+        function togglePriceField() {
+            const type = document.getElementById('input-type').value;
+            document.getElementById('group-price').style.display = type === 'MARKET' ? 'none' : 'flex';
+        }
+
+        function switchSymbol(symbol, btn) {
+            currentSymbol = symbol;
+            document.querySelectorAll('.symbol-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('active-symbol-badge').innerText = symbol;
+
+            const baseP = bookData[symbol].basePrice;
+            document.getElementById('input-price').value = baseP.toFixed(2);
+            renderCurrentBook();
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 3000);
+        }
+
+        function renderCurrentBook() {
+            const currentBook = bookData[currentSymbol];
+            const bids = currentBook.bids;
+            const asks = currentBook.asks;
+
+            const asksContainer = document.getElementById('asks-list');
+            const bidsContainer = document.getElementById('bids-list');
+
+            const maxBidVol = Math.max(...bids.map(b => b.quantity), 1);
+            const maxAskVol = Math.max(...asks.map(a => a.quantity), 1);
+            const maxVol = Math.max(maxBidVol, maxAskVol);
+
+            // Render Asks
+            asksContainer.innerHTML = asks.slice(0, 6).map(a => `
+                <div class="book-row ask">
+                    <div class="bar" style="width: ${(a.quantity / maxVol) * 100}%;"></div>
+                    <span class="ask-price">${a.price.toFixed(2)}</span>
+                    <span style="text-align: right;">${a.quantity}</span>
+                    <span style="text-align: right; color: var(--text-muted);">${(a.price * a.quantity).toFixed(0)}</span>
+                </div>
+            `).join('');
+
+            // Render Bids
+            bidsContainer.innerHTML = bids.slice(0, 6).map(b => `
+                <div class="book-row bid">
+                    <div class="bar" style="width: ${(b.quantity / maxVol) * 100}%;"></div>
+                    <span class="bid-price">${b.price.toFixed(2)}</span>
+                    <span style="text-align: right;">${b.quantity}</span>
+                    <span style="text-align: right; color: var(--text-muted);">${(b.price * b.quantity).toFixed(0)}</span>
+                </div>
+            `).join('');
+
+            const bestBid = bids.length ? bids[0].price : 0;
+            const bestAsk = asks.length ? asks[0].price : 0;
+            if (bestBid && bestAsk) {
+                document.getElementById('spread-val').innerText = (bestAsk - bestBid).toFixed(2);
+                document.getElementById('mid-val').innerText = ((bestAsk + bestBid) / 2).toFixed(2);
+            }
+        }
+
+        // Try remote backend if running locally or deployed, otherwise use in-browser FIFO matching engine
+        async function submitOrder() {
+            orderCounter++;
+            const type = document.getElementById('input-type').value;
+            const price = parseFloat(document.getElementById('input-price').value) || 0;
+            const qty = parseInt(document.getElementById('input-qty').value) || 1;
+            const tif = document.getElementById('input-tif').value;
+
+            // First check if live local or backend API is responding
+            try {
+                const res = await fetch('/api/order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        order_id: orderCounter,
+                        client_id: 1,
+                        symbol: currentSymbol,
+                        side: currentSide,
+                        order_type: type,
+                        price: price,
+                        quantity: qty,
+                        tif: tif
+                    })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    showToast(`Order #${orderCounter} executed on backend!`);
+                    if (data.execution_reports) {
+                        data.execution_reports.forEach(r => {
+                            if (r.exec_type === 'TRADE') {
+                                addTradeToTape(r.price, r.last_qty, r.side);
+                            }
+                        });
+                    }
+                    return;
+                }
 
 
 
