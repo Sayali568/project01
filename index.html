@@ -743,14 +743,110 @@
                     }
                     return;
                 }
+                 } catch (e) {
+                // Backend not connected; run high-speed in-browser Price-Time Priority matching!
+            }
 
+            // In-browser matching logic
+            const currentBook = bookData[currentSymbol];
+            if (currentSide === 'BUY') {
+                if (type === 'MARKET' || price >= currentBook.asks[0]?.price) {
+                    // Match against asks
+                    let leaves = qty;
+                    while (leaves > 0 && currentBook.asks.length > 0 && (type === 'MARKET' || price >= currentBook.asks[0].price)) {
+                        const bestAsk = currentBook.asks[0];
+                        const matchQty = Math.min(leaves, bestAsk.quantity);
+                        addTradeToTape(bestAsk.price, matchQty, 'BUY');
+                        bestAsk.quantity -= matchQty;
+                        leaves -= matchQty;
+                        if (bestAsk.quantity <= 0) currentBook.asks.shift();
+                    }
+                    showToast(`BUY matched ${qty - leaves} units!`);
+                } else {
+                    currentBook.bids.unshift({ price, quantity: qty });
+                    currentBook.bids.sort((a, b) => b.price - a.price);
+                    showToast(`Limit BUY order #${orderCounter} rested in book.`);
+                }
+            } else {
+                if (type === 'MARKET' || price <= currentBook.bids[0]?.price) {
+                    // Match against bids
+                    let leaves = qty;
+                    while (leaves > 0 && currentBook.bids.length > 0 && (type === 'MARKET' || price <= currentBook.bids[0].price)) {
+                        const bestBid = currentBook.bids[0];
+                        const matchQty = Math.min(leaves, bestBid.quantity);
+                        addTradeToTape(bestBid.price, matchQty, 'SELL');
+                        bestBid.quantity -= matchQty;
+                        leaves -= matchQty;
+                        if (bestBid.quantity <= 0) currentBook.bids.shift();
+                    }
+                    showToast(`SELL matched ${qty - leaves} units!`);
+                } else {
+                    currentBook.asks.unshift({ price, quantity: qty });
+                    currentBook.asks.sort((a, b) => a.price - b.price);
+                    showToast(`Limit SELL order #${orderCounter} rested in book.`);
+                }
+            }
+            renderCurrentBook();
+        }
 
+        function addTradeToTape(price, qty, side) {
+            const timeStr = new Date().toLocaleTimeString();
+            tradesTape.unshift({ price, qty, side, time: timeStr });
+            if (tradesTape.length > 30) tradesTape.pop();
 
+            document.getElementById('trade-count').innerText = `${tradesTape.length} trades`;
+            const tapeContainer = document.getElementById('trades-tape');
+            tapeContainer.innerHTML = tradesTape.map(t => `
+                <div class="trade-item ${t.side.toLowerCase()}">
+                    <span class="price">${t.price.toFixed(2)}</span>
+                    <span style="text-align: right;">${t.qty}</span>
+                    <span style="text-align: right; color: var(--text-muted);">${t.time}</span>
+                </div>
+            `).join('');
+        }
 
+        function triggerSimulationBurst() {
+            showToast('Simulating 10 high-frequency market orders...');
+            for (let i = 0; i <=8; i++) {
+                setTimeout(() => {
+                    orderCounter++;
+                    const side = Math.random() > 0.5 ? 'BUY' : 'SELL';
+                    const isMarket = Math.random() > 0.4;
+                    const offset = (Math.random() * 2).toFixed(2);
+                    const currentBook = bookData[currentSymbol];
+                    const baseP = currentBook.basePrice;
+                    const price = side === 'BUY' ? (baseP - offset) : (baseP + offset);
+                    const qty = Math.floor(Math.random() * 6) + 1;
 
-    </style>
-</head>
-<body>
-    
+                    if (isMarket) {
+                        if (side === 'BUY' && currentBook.asks.length > 0) {
+                            addTradeToTape(currentBook.asks[0].price, qty, 'BUY');
+                        } else if (side === 'SELL' && currentBook.bids.length > 0) {
+                            addTradeToTape(currentBook.bids[0].price, qty, 'SELL');
+                        }
+                    } else {
+                        if (side === 'BUY') {
+                            currentBook.bids.push({ price: parseFloat(price), quantity: qty });
+                            currentBook.bids.sort((a, b) => b.price - a.price);
+                        } else {
+                            currentBook.asks.push({ price: parseFloat(price), quantity: qty });
+                            currentBook.asks.sort((a, b) => a.price - b.price);
+                        }
+                    }
+                    renderCurrentBook();
+                }, i * 120);
+            }
+        }
+
+        // Initialize
+        renderCurrentBook();
+    </script>
 </body>
 </html>
+
+
+
+
+
+
+    
